@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-//const { Product } = require("../models/Product");
+const Product = require("../models/Product");
 const multer = require('multer');
 
 //=================================
@@ -32,6 +32,14 @@ router.post("/uploadImage", (req, res) => {
     })
 });
 
+router.post("/uploadProduct", (req, res) => {
+    const product = new Product(req.body)
+
+    product.save((err) => {
+        if(err) return res.json({success: false, err})
+        return res.json({success: true})
+    })
+});
 
 
 module.exports = router;

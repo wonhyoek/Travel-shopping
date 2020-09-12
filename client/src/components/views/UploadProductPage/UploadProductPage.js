@@ -46,11 +46,15 @@ export default (props) => {
   };
 
   const updateImages = (newImages) => {
-    setImages([...Images, newImages])
+    setImages( newImages )
   }
 
   const onSubmit = (event) => {
     event.preventDefault();
+
+    if(!TitleValue || !DescriptionValue || !PriceValue || !ContinentValue || !Images){
+      return alert('Fil all the fields first!') 
+    }
 
     let variables = {
       writer: props.user.userData._id,
@@ -103,7 +107,7 @@ export default (props) => {
         <br />
         <br />
 
-        <select onChange={onContinentsSelectChange}>
+        <select onChange={onContinentsSelectChange} value={ContinentValue}>
           {Continents.map((item) => (
             <option key={item.key} value={item.key}>
               {item.value}

@@ -40,7 +40,6 @@ export default () => {
   };
 
   const updateImages = (newImages) => {
-    console.log(newImages)
     setImages([...Images, newImages])
   }
 

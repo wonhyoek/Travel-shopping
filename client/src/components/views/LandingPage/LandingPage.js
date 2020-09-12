@@ -7,19 +7,45 @@ const { Meta } = Card
 
 function LandingPage() {
 
-    const [Products, setProducts] = useState([])
+    const [Products, setProducts] = useState([]);
+    const [Skip, setSkip] = useState(0);
+    const [Limit, setLimit] = useState(8);
+    const [PostSize, setPostSize] = useState(0)
 
     useEffect(() => {
-        axios.get('/api/product/getProducts')
+
+        const variables = {
+            skip: Skip,
+            limit: Limit
+        }
+
+        getProducts(variables)
+    }, [])
+
+    const getProducts = (variables) => {
+        axios.post('/api/product/getProducts', variables)
         .then(response => {
             if(response.data.success){
-                setProducts(response.data.products)
-                console.log(response.data.products)
+                setProducts([...Products, ...response.data.products])
+                setPostSize(response.data.postSize)
             } else {
                 alert("Failed to fetch product datas")
             }
         })
-    }, [])
+    }
+
+    const onLoadMore = () => {
+        let skip = Limit + Skip;
+
+        const variables = {
+            skip: skip,
+            limit: Limit
+        }
+
+        getProducts(variables)
+
+        setSkip(skip)
+    }
 
     const renderCards = Products.map((product, index) => {
 
@@ -36,6 +62,7 @@ function LandingPage() {
         </Col>
     })
 
+    
     return (
         <div style = {{ width: '75%', margin: '3rem auto' }}>
 
@@ -63,9 +90,11 @@ function LandingPage() {
             <br/>
             <br/>
 
-            <div style ={{ display : 'flex', justifyContent: 'center'}}>
-                <button>Load More</button>
+            {PostSize >= Limit &&
+                <div style ={{ display : 'flex', justifyContent: 'center'}}>
+                <button onClick = {onLoadMore}>Load More</button>
             </div>
+            }
 
         </div>
     )

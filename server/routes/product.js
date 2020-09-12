@@ -41,11 +41,21 @@ router.post("/uploadProduct", (req, res) => {
     })
 });
 
-router.get("/getProducts", (req, res) => {
+router.post("/getProducts", (req, res) => {
+
+    let order = req.body.order ? req.body.order : "desc";
+    let sortBy = req.body.sortBy ? req.body.sortBy : "_id";
+    let limit = req.body.limit ? req.body.limit : 100;
+    let skip = parseInt(req.body.skip)
+
     Product.find()
+    .populate('writer')
+    .sort([[sortBy, order]])
+    .skip(skip)
+    .limit(limit)
     .exec((err, products) => {
         if(err) return res.json({success: false, err})
-        return res.json({success: true, products})
+        return res.json({success: true, products, postSize: products.length})
     })
 });
 

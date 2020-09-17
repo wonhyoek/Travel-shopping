@@ -117,7 +117,18 @@ function LandingPage() {
     }
     
     const updateSearchTerm = (newSearchTerm) => {
-        setSearchTerm(setSearchTerm);
+
+        const variables = {
+            skip: 0,
+            limit: 8,
+            filters: Filters,
+            searchTerm: newSearchTerm
+        }
+
+        setSkip(0);
+        setSearchTerm(newSearchTerm);
+
+        getProducts(variables);
     }
 
     return (

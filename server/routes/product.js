@@ -49,6 +49,7 @@ router.post("/getProducts", (req, res) => {
     let skip = parseInt(req.body.skip);
 
     let findArgs = {};
+    let term = req.body.searchTerm;
 
     for(let key in req.body.filters) {
         if(req.body.filters[key].length > 0) {
@@ -64,15 +65,28 @@ router.post("/getProducts", (req, res) => {
         }
     }
 
-    Product.find(findArgs)
-    .populate('writer')
-    .sort([[sortBy, order]])
-    .skip(skip)
-    .limit(limit)
-    .exec((err, products) => {
-        if(err) return res.json({success: false, err})
-        return res.json({success: true, products, postSize: products.length})
-    })
+    if(term) {
+        Product.find(findArgs)
+        .find({ $text: {$search: term}})
+        .populate('writer')
+        .sort([[sortBy, order]])
+        .skip(skip)
+        .limit(limit)
+        .exec((err, products) => {
+            if(err) return res.json({success: false, err})
+            return res.json({success: true, products, postSize: products.length})
+        })
+    } else {
+        Product.find(findArgs)
+        .populate('writer')
+        .sort([[sortBy, order]])
+        .skip(skip)
+        .limit(limit)
+        .exec((err, products) => {
+            if(err) return res.json({success: false, err})
+            return res.json({success: true, products, postSize: products.length})
+        })
+    }
 });
 
 

@@ -89,8 +89,8 @@ router.post("/getProducts", (req, res) => {
     }
 });
 
-
-router.get("/products_by_id?id=${productId}&type=single", (req, res) => {
+//?id=${productId}&type=single
+router.get("/products_by_id", (req, res) => {
     let type = req.query.type;
     let productIds = req.query.id;
 

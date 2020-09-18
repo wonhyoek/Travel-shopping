@@ -1,9 +1,30 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import {Button, Descriptions} from "antd";
 
-export default () => {
+export default (props) => {
+
+    const [Product, setProduct] = useState({});
+
+    useEffect(() => {
+        setProduct(props.detail)
+    }, [props.detail])
+
     return (
         <div>
-            ProductInfo
+            <Descriptions title = "Product Info">
+                <Descriptions.Item label = "Price">{Product.price}</Descriptions.Item>
+                <Descriptions.Item label = "Sold">{Product.sold}</Descriptions.Item>
+                <Descriptions.Item label = "View">{Product.views}</Descriptions.Item>
+                <Descriptions.Item label = "Description">{Product.description}</Descriptions.Item>
+                <br/>
+                <br/>
+                <br/>
+                <div style = {{display: 'flex', justifyContent: 'center'}}>
+                    <Button size = 'large' shape = 'round' type = 'danger' onClick>
+                        Add to Cart
+                    </Button>
+                </div>
+            </Descriptions>
         </div>
     )
 }

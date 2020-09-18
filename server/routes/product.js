@@ -90,4 +90,23 @@ router.post("/getProducts", (req, res) => {
 });
 
 
+router.get("/products_by_id?id=${productId}&type=single", (req, res) => {
+    let type = req.query.type;
+    let productIds = req.query.id;
+
+    if(type === 'array'){
+
+    }
+
+    Product.find({'_id': {$in: productIds}})
+    .populate('writer')
+    .exec((err, product) => {
+        if(err){
+            console.log(err);
+            return res.send(err);
+        }
+        return res.send(product)
+    })
+});
+
 module.exports = router;
